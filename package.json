@@ -1,0 +1,26 @@
+{
+  "name": "learnnode",
+  "version": "1.0.0",
+  "description": "clx-cli",
+  "main": "index.js",
+  "bin": {
+    "abc": "index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chenglinxing/learnNode.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chenglinxing/learnNode/issues"
+  },
+  "homepage": "https://github.com/chenglinxing/learnNode#readme",
+  "dependencies": {
+    "commander": "^8.3.0",
+    "download-git-repo": "^3.0.2"
+  }
+}
