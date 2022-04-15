@@ -2,7 +2,14 @@ const http = require("http")
 
 //创建一个web服务器
 const server = http.createServer((req, res) => {
-    res.end("hello server")
+    //响应状态码
+    //设置状态码 方法一
+    // res.statusCode = 400
+    //设置状态码  方法二
+    res.writeHead(200,{
+        a:1
+    })
+    res.end("hello server") 
 })
 
 

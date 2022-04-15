@@ -2,6 +2,9 @@ const http = require("http")
 
 //创建一个web服务器
 const server = http.createServer((req, res) => {
+    //响应结果
+    //res.write("响应结果")
+    // res.end("test") 先res.write("test") 再res.end()
     res.end("hello server")
 })
 
