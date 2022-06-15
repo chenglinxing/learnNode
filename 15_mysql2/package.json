@@ -1,0 +1,14 @@
+{
+  "name": "15_mysql2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "01_mysql2的基本使用.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mysql2": "^2.3.3"
+  }
+}
