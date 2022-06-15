@@ -1,22 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <!-- <a class="a" href="https://www.baidu.com">123 onmouseover='alert(123)'</a>
-    <span>&lt; &gt;</span> -->
-    <input type="text" id="input" />
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    table td,
+    table th {
+      border: 1px solid #cad9ea;
+      color: #666;
+      height: 30px;
+
+    }
+  </style>
+</head>
+
+<body>
+  <div class="table_content"></div>
+</body>
+
 </html>
 
 <script>
-  // let a = document.getElementsByClassName("a")[0]
-  // a.innerHTML = "123 onmouseover='alert(123)'"
-  let input = document.getElementById("input");
-  console.log(input)
-  input.setAttribute("placeholder","123")
+  let init = {
+    //表头
+    tableColumnList: ["编号", "姓名", "性别", "生日"],
+    //数据
+    arr: [{
+        id: 1,
+        name: "小明",
+        sex: '0',
+        birthday: "2000-01-01"
+      },
+      {
+        id: 2,
+        name: "小红",
+        sex: '1',
+        birthday: "2002-02-02"
+      },
+      {
+        id: 1,
+        name: "小明",
+        sex: '0',
+        birthday: "2003-03-03"
+      }
+    ],
+    //模拟性别
+    sexList: [{
+        key: '1',
+        value: "男"
+      },
+      {
+        key: '0',
+        value: "女"
+      }
+    ],
+    //初始化表格
+    initTable: function () {
+      // console.log(this)
+      //创建table
+      let table = utils.createDocument("table")
+      //创建thead并插入表头数据
+      let thead = utils.createDocument("thead")
+      //创建thead中的tr
+      let thead_tr = utils.createDocument("tr")
+      //接收thead中的tr所有内容
+      let str_thead = ""
+      for (let i in this.tableColumnList) {
+        str_thead += `<td>${this.tableColumnList[i]}</td>`
+      }
+      // console.log(str_thead);
+      //将值赋给tr
+      thead_tr.innerHTML = str_thead
+      //在thead插入thead_tr
+      thead.appendChild(thead_tr)
+      //将thead插入table
+      table.appendChild(thead)
+
+      //创建tbody
+      let tbody = utils.createDocument("tbody")
+      //接收tbody中tr所有内容
+      let str_tbody = ""
+      for (let i in this.arr) {
+        str_tbody += `
+          <tr class="tr_content">
+            <td class="num">${Number(i)+1}</td>
+            <td class="name">
+              <input type="text" value="${this.arr[i].name}" onchange="handleChange(event,${i},'name')">
+            </td>
+            <td width="100">
+              ${utils.createSelect(this.sexList,this.arr[i].sex,i,"sex")}
+            </td>
+            <td><input type="date" value="${this.arr[i].birthday}" onchange="handleChange(event,${i},'birthday')"></td>
+          </tr>`
+      }
+      // console.log(str_tbody);
+      //将tbody中tr的内容赋值
+      tbody.innerHTML = str_tbody
+      //将tbody插入table
+      table.appendChild(tbody)
+
+
+      //将talbe插入div
+      let table_content = document.getElementsByClassName("table_content")[0]
+      table_content.appendChild(table)
+    }
+  }
+
+
+  //工具方法
+  let utils = {
+    //创建标签
+    createDocument: function (str) {
+      return document.createElement(str)
+    },
+    //生成下拉框
+    /**
+     * 创建下拉框
+     * 接收一个数组  去生成一个原生的select
+     * arr:字典表 例如[{key:1,name:"男"}] 必传
+     * currentValue:当前下拉框的值  必传
+     * currentTableIndex:当前所在table的索引 必传
+     * currentProps:当前使用的字段 必传项
+     * className:类名 非必传
+     */
+    createSelect: function (arr, currentValue, currentTableIndex, currentProps, className = "select") {
+      if (!(Array.isArray(arr) && currentValue != null && currentTableIndex && currentProps)) {
+        console.error("createSelect方法参数错误")
+        return
+      }
+      //存放option 下拉框内容
+      let select_str = ""
+      for (let i in arr) {
+        let selected = currentValue == arr[i].key ? "selected" : ""
+        select_str += `<option ${selected} value="${arr[i].key}">${arr[i].value}</option>`
+      }
+      // console.log(select_str);
+      return `<select class="${className}" onchange="handleChange(event,${currentTableIndex},'${currentProps}')">${select_str}</select>`
+    },
+  }
+  window.onload = () => {
+    //初始化table
+    init.initTable()
+  }
+
+  //修改表格
+  function handleChange(event, index, currentProps) {
+    // console.log(event.target.value, index, currentProps,init.arr);
+    // console.log(init.arr[index][currentProps]);
+    init.arr[index][currentProps] = event.target.value
+    //修改后的列表
+    console.log(init.arr,'修改后');
+  }
+
+
+
+
+
+
+  // //模拟表头
+  // let tableColumnList = ["编号", "姓名", "性别", "生日"]
+  // //模拟数据
+  // let arr = [{
+  //   id: 1,
+  //   name: "小明",
+  //   sex: 0,
+  //   birthday: "2000-01-01"
+  // }, {
+  //   id: 2,
+  //   name: "小红",
+  //   sex: 1,
+  //   birthday: "2002-02-02"
+  // }, {
+  //   id: 1,
+  //   name: "小明",
+  //   sex: 0,
+  //   birthday: "2003-03-03"
+  // }]
+  // //模拟性别
+  // let sexList = [{
+  //   key: 1,
+  //   value: "男"
+  // }, {
+  //   key: 0,
+  //   value: "女"
+  // }]
+  // //创建table
+  // let table = createDocument("table")
+  // //创建thead并插入表头数据
+  // let thead = createDocument("thead")
+  // //创建thead中的tr
+  // let thead_tr = createDocument("tr")
+  // //接收thead中的tr所有内容
+  // let str_thead = ""
+  // for (let i in tableColumnList) {
+  //   str_thead += `<td>${tableColumnList[i]}</td>`
+  // }
+  // console.log(str_thead);
+  // //将值赋给tr
+  // thead_tr.innerHTML = str_thead
+  // //在thead插入thead_tr
+  // thead.appendChild(thead_tr)
+  // //将thead插入table
+  // table.appendChild(thead)
+
+  // //创建tbody
+  // let tbody = createDocument("tbody")
+  // //接收tbody中tr所有内容
+  // let str_tbody = ""
+  // for (let i in arr) {
+  //   str_tbody += `
+  //   <tr class="tr_content">
+  //     <td class="num">${Number(i)+1}</td>
+  //     <td class="name">
+  //       <input type="text" value="${arr[i].name}">
+  //     </td>
+  //     <td width="100">
+  //       ${createSelect(sexList,arr[i].sex)}
+  //     </td>
+  //     <td><input type="date" value="${arr[i].birthday}"></td>
+  //   </tr>`
+  // }
+  // // console.log(str_tbody);
+  // //将tbody中tr的内容赋值
+  // tbody.innerHTML = str_tbody
+  // //将tbody插入table
+  // table.appendChild(tbody)
+
+
+  // //将talbe插入div
+  // let table_content = document.getElementsByClassName("table_content")[0]
+  // table_content.appendChild(table)
+
+
+
+
+
+  // //下拉框
+  // /**
+  //  * 创建下拉框
+  //  * 接收一个数组  去生成一个原生的select
+  //  */
+  // function createSelect(arr, current, className = "select") {
+  //   //存放option 下拉框内容
+  //   let select_str = ""
+  //   for (let i in arr) {
+  //     let selected = current == arr[i].key ? "selected" : ""
+  //     select_str += `<option ${selected} value="${arr[i].key}">${arr[i].value}</option>`
+  //   }
+  //   console.log(select_str);
+  //   return `<select class="${className}">${select_str}</select>`
+  // }
 </script>
